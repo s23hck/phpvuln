@@ -4,11 +4,9 @@ import argparse
 
 from colorama import Fore
 
-from core import BANNER
-from core import utils
-
-from lib.logger import log
-
+from lib.core.banner import BANNER
+from lib.core import utils
+from lib.core import log
 
 # globals
 found = 0

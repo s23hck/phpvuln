@@ -1,6 +1,6 @@
 import ipaddress
 
-from lib.common.vuln.abc import Vulnerability
+from lib.common.abc import Vulnerability
 
 
 class IPExposure(Vulnerability):

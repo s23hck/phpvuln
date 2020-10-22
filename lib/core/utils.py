@@ -4,7 +4,7 @@ import inspect
 import importlib
 
 
-from lib.common.vuln.abc import Vulnerability
+from lib.common.abc import Vulnerability
 
 vulnerability_classes_path = os.path.join('lib', 'vulns')
 

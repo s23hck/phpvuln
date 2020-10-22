@@ -1,10 +1,4 @@
-import os
-
 from colorama import Fore
-from colorama import init
-
-if os.name == 'nt':
-    init(convert=True)
 
 BANNER = fr'''{Fore.LIGHTBLUE_EX}       _                  _
   _ __| |_  _ ____ ___  _| |_ _  

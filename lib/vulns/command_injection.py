@@ -1,4 +1,4 @@
-from lib.common.vuln.abc import Vulnerability
+from lib.common.abc import Vulnerability
 
 
 class CommandInjection(Vulnerability):

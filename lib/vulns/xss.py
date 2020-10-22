@@ -1,6 +1,6 @@
 import re
 
-from lib.common.vuln.abc import Vulnerability
+from lib.common.abc import Vulnerability
 
 
 class XSS(Vulnerability):
