@@ -24,7 +24,7 @@ class Vulnerability(ABC):
     def find(self) -> List[Tuple[str, int, object]]:
         pass
 
-    def get_lines(self) -> List[List[str]]:
+    def get_lines(self) -> List[str]:
         with open(self.file_path, 'r', encoding='utf-8', errors='ignore') as f:
             lines = [line.strip() for line in f.readlines()]
         return lines
