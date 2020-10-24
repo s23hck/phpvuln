@@ -10,4 +10,4 @@ class SQLInjection(Vulnerability):
         self.file_path = file_path
 
     def find(self):
-        return self._find(r'(mysqli?_|\->)query\(("|\').*[\$].*("|\')\)', False)
+        return self._find(r'(mysqli?_|\->)query\(("|\').*[\$].+("|\')\)', False)

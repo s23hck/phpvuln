@@ -1,3 +1,5 @@
+import re
+
 from lib.common.abc import Vulnerability
 
 
@@ -10,4 +12,9 @@ class CommandInjection(Vulnerability):
         self.file_path = file_path
 
     def find(self):
-        return self._find(r'\s+(exec|system|shell_exec)\(.*[\$].+\)', False)
+        vulns = []
+        for code, no, match in self._find(r'(\s+|^)(exec|system|shell_exec)\(.*[\$].+\)', False):
+            if re.search(r'(exec|system|shell_exec)\(.*escapeshellarg\(.*[\$].+\).*\)', match):
+                continue
+            vulns.append((code, no, match))
+        return vulns

@@ -1,3 +1,5 @@
+import re
+
 from lib.common.abc import Vulnerability
 
 
@@ -10,9 +12,9 @@ class Credentials(Vulnerability):
         self.file_path = file_path
 
     def find(self):
-        vulnerable = []
+        vulns = []
 
-        for code, line_no, match in self._find(r'\$[^\->]*(password|pwd|pass)\s+=\s+("|\').*("|\')'):
+        for code, line_no, match in self._find(r'\$[^\->\$]*(pwd|pass|key|secret|token)[\w]*\s*=\s*("|\').*("|\')'):
             #password = re.search(r'.*=.*("|\')(.+?)("|\')', code)
             # if not password:
             #    continue
@@ -20,6 +22,9 @@ class Credentials(Vulnerability):
             # if self._is_hashed(password.group(2)):
             #    continue
 
-            vulnerable.append((code, line_no, match))
+            vulns.append((code, line_no, match))
 
-        return vulnerable
+        return vulns
+
+    def _is_hashed(self, x):
+        return bool(re.match(r'^([a-fA-F0-9\$\.]{32}|[a-fA-F0-9\$\.]{64})$', x))

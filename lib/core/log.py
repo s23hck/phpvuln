@@ -11,10 +11,9 @@ def found(file, line, no, vuln_part, vuln):
     print()
     
 def error(text, should_exit=True):
-    print(f'{Fore.RED}ERROR:{Fore.RESET} {text}{Fore.RESET}')
-    
+    print(f'{Fore.RED}ERROR:{Fore.RESET} {text}{Fore.RESET}.')
     if should_exit:
         exit(-1)
         
 def info(text):
-    print(f'{Fore.BLUE}INFO:{Fore.RESET} {text}{Fore.RESET}')
+    print(f'{Fore.BLUE}INFO:{Fore.RESET} {text}{Fore.RESET}.')

@@ -11,9 +11,9 @@ from lib.core import log
 # globals
 found = 0
 
-
 def main():
     vuln_classes = utils.get_vulnerability_classes()
+    vulns_list = [(_class.name, _class.keyname) for _class in vuln_classes]
 
     print(BANNER)
 
@@ -21,8 +21,10 @@ def main():
 
     parser.error = log.error
 
-    parser.add_argument('-p', '--path', help='path', dest='path', metavar='')
-    parser.add_argument('-v', '--vulns', help='vulnerabilities to look for', dest='vulns', metavar='', default=','.join(_class.keyname for _class in vuln_classes))
+    parser.add_argument('-p', '--path', help='php project path', dest='path', metavar='')
+    parser.add_argument('-f', '--file', help='specific file to check', dest='file', metavar='')
+    parser.add_argument('-v', '--vulns', help='vulnerabilities to look for', dest='vulns', metavar='', default=','.join(x[1] for x in vulns_list))
+    parser.add_argument('--list-vulns', help='list vulnerabilities', dest='list_vulns', action='store_true')
 
     args = parser.parse_args()
 
@@ -30,41 +32,65 @@ def main():
         parser.print_help()
         exit()
 
-    if not os.path.exists(args.path) or not os.path.isdir(args.path):
-        log.error('directory not found.')
+    if args.list_vulns:
+        print('list of valid vulnerabilities:')
+        print('\n'.join(f' {Fore.YELLOW}{x[1]:<8}{Fore.RESET}{x[0]}' for x in vulns_list))
+        exit(0)
+
+    if not args.path and not args.file:
+        log.error('missing mandatory option: -p/--path or -f/--file')
+
+    if args.path:
+        args.file = None
+
+        if not os.path.exists(args.path) or not os.path.isdir(args.path):
+            log.error('directory not found')
+    else:
+        if not os.path.exists(args.file) or not os.path.isfile(args.file) or not args.file.endswith('.php') and not args.file.endswith('.html'):
+            log.error('php file not found')
 
     if not args.vulns:
-        log.error('no vulnerabilities to check is selected.')
+        log.error('no vulnerabilities to check is selected')
 
     chosen_vulns = args.vulns.lower().split(',')
 
     for vuln in chosen_vulns:
         if not [_class for _class in vuln_classes if _class.keyname == vuln]:
             log.error(f'unrecognized vulnerability: {vuln}')
-            exit()
+            exit(0)
 
     global found
 
-    for root, _, directory in os.walk(args.path):
-        for file in directory:
-            if not file.endswith('.php') and not file.endswith('.html'):
-                continue
+    if args.path:
+        for root, _, directory in os.walk(args.path):
+            for file in directory:
+                if not file.endswith('.php') and not file.endswith('.html'):
+                    continue
 
-            file_path = os.path.join(root, file)
+                file_path = os.path.join(root, file)
 
-            for vuln in chosen_vulns:
-                Vulnerability = [_class for _class in vuln_classes if _class.keyname == vuln][0]
+                for vuln in chosen_vulns:
+                    Vulnerability = [_class for _class in vuln_classes if _class.keyname == vuln][0]
 
-                vuln_obj = Vulnerability(file_path)
+                    vuln_obj = Vulnerability(file_path)
 
-                for line, no, vuln_part in vuln_obj.find():
-                    log.found(file_path, line, no, vuln_part, vuln_obj.name)
-                    found += 1
+                    for line, no, vuln_part in vuln_obj.find():
+                        log.found(file_path, line, no, vuln_part, vuln_obj.name)
+                        found += 1
+    else:
+        for vuln in chosen_vulns:
+            Vulnerability = [_class for _class in vuln_classes if _class.keyname == vuln][0]
+
+            vuln_obj = Vulnerability(args.file)
+
+            for line, no, vuln_part in vuln_obj.find():
+                log.found(args.file, line, no, vuln_part, vuln_obj.name)
+                found += 1
 
     if found > 0:
-        log.info(f'phpvuln finished with {Fore.GREEN}{found} {Fore.RESET}potential vulnerabilit{"y" if found == 1 else "ies"} found.')
+        log.info(f'phpvuln finished with {Fore.GREEN}{found} {Fore.RESET}potential vulnerabilit{"y" if found == 1 else "ies"} found')
     else:
-        log.info(f'phpvuln finished, but no potential vulnerabilities were found.')
+        log.info(f'phpvuln finished, but no potential vulnerabilities were found')
 
 
 if __name__ == '__main__':

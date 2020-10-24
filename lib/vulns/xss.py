@@ -12,13 +12,10 @@ class XSS(Vulnerability):
         self.file_path = file_path
 
     def find(self):
-        return []
+        return self._find(r'<.+>.*(\'|").*(\$[a-zA-Z0-9_]+).*(\'|").*</.+>|<.*(\'|").*<\?php.*(\$[a-zA-Z0-9_]+).*(\'|").*>', False)
 
-    def is_user_input(self, field):
+    def _is_user_input(self, field):
         for line in self.get_lines():
-            match = re.search(r'_(GET|POST|DELETE|PUT|PATCH|OPTIONS)\[(.*)%s.*\]' % field, line)
-
-            if match:
+            if re.search(r'_(GET|POST|DELETE|PUT|PATCH|OPTIONS)\[(.*)%s.*\]' % field, line):
                 return True
-
         return False
