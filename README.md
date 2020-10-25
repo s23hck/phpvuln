@@ -1,5 +1,7 @@
 # phpvuln
 
+[![Python 2.6|2.7|3.x](https://img.shields.io/badge/python-2.6|2.7|3.x-yellow.svg)](https://www.python.org/)
+
 phpvuln is an open source penetration testing tool that can automate the process of finding potential common PHP vulnerabilities in PHP code i.e. command injection, local/remote file inclusion, SQL injection etc.
 
 ## Screenshot
@@ -16,13 +18,13 @@ phpvuln is an open source penetration testing tool that can automate the process
 
 You can download phpvuln by cloning the Git repository:
 
-```bash
+``` bash
 git clone https://github.com/ecriminal/phpvuln.git
 ```
 
 Install the required PIP packages:
 
-```bash
+``` bash
 python -m  pip install -r requirements.txt
 ```
 
