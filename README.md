@@ -1,6 +1,6 @@
 # phpvuln
 
-phpvuln is an open source penetration testing tool that automates the process of finding potential vulnerabilities in PHP code.
+phpvuln is an open source penetration testing tool that can automate the process of finding potential common PHP vulnerabilities in PHP code i.e. command injection, local/remote file inclusion, SQL injection etc.
 
 ## Screenshot
 
