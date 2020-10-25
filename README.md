@@ -2,7 +2,7 @@
 
 [![Python 3.x](https://img.shields.io/badge/python-3.x-yellow.svg)](https://www.python.org/)
 
-phpvuln is an open source OWASP penetration testing tool written in Python 3, that can speed up the the process of finding common PHP vulnerabilities in PHP code i.e. command injection, local/remote file inclusion and SQL injection.
+phpvuln is an open source OWASP penetration testing tool written in Python 3, that can speed up the the process of finding common PHP vulnerabilities in PHP code, i.e. command injection, local/remote file inclusion and SQL injection. It uses different searching and matching techniques to find the results.
 
 ## Screenshot
 
