@@ -33,5 +33,4 @@ python phpvuln.py -h
 ## Contributers
 
 * checksum
-
- - [Twitter](https://twitter.com/computergoon)
+ * [Twitter](https://twitter.com/computergoon)
