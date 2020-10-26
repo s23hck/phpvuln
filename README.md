@@ -29,3 +29,9 @@ To get the list of all options use:
 ``` bash
 python phpvuln.py -h
 ```
+
+## Developers
+
+* checksum
+
+ - [Twitter](https://twitter.com/computergoon)
