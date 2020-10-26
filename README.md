@@ -30,7 +30,7 @@ To get the list of all options use:
 python phpvuln.py -h
 ```
 
-## Developers
+## Contributers
 
 * checksum
 
