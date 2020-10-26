@@ -16,6 +16,8 @@ class XSS(Vulnerability):
 
     def _is_user_input(self, field):
         for line in self.get_lines():
+        
             if re.search(r'_(GET|POST|DELETE|PUT|PATCH|OPTIONS)\[(.*)%s.*\]' % field, line):
                 return True
+        
         return False

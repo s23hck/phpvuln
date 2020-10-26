@@ -14,8 +14,11 @@ class CommandInjection(Vulnerability):
 
     def find(self):
         vulns = []
+
         for code, no, match in self._find(r'(\s+|^)(exec|system|shell_exec)\(.*[\$].+\)', False):
             if re.search(r'(exec|system|shell_exec)\(.*escapeshellarg\(.*[\$].+\).*\)', match):
                 continue
+
             vulns.append((code, no, match))
+
         return vulns
