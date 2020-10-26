@@ -47,6 +47,10 @@ class Vulnerability(ABC):
             List[Tuple[str, int, re.Match]]: list of potential vulnerable code containing the line, line number and regex match
         """
         pass
+    
+    @classmethod
+    def issubclass(cls, other):
+        return any(str(other) == str(obj) for obj in other.__mro__) and cls.__name__ != other.__name__
 
     def get_lines(self) -> List[str]:
         """ Get all lines of file.

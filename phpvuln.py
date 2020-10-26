@@ -23,13 +23,14 @@ def main():
 
     parser.add_argument('-p', '--path', help='php project path', dest='path', metavar='')
     parser.add_argument('-f', '--file', help='specific file to check', dest='file', metavar='')
-    parser.add_argument('-v', '--vulns', help='vulnerabilities to look for', dest='vulns', metavar='', default=','.join(x[1] for x in vulns_list))
-    parser.add_argument('--list-vulns', help='list vulnerabilities', dest='list_vulns', action='store_true')
+    parser.add_argument('-v', '--vulns', help='common vulnerabilities to look for. Default: all', dest='included', metavar='', default=','.join(x[1] for x in vulns_list))
+    parser.add_argument('--exclude', help='exclude common vulnerabilities', dest='excluded', metavar='')
+    parser.add_argument('--list-vulns', help='list common vulnerabilities', dest='list_vulns', action='store_true')
 
     args = parser.parse_args()
 
     if len(sys.argv) < 2:
-        parser.print_help()
+        parser.print_usage()
         exit()
 
     if args.list_vulns:
@@ -49,14 +50,21 @@ def main():
         if not os.path.exists(args.file) or not os.path.isfile(args.file) or not args.file.endswith('.php') and not args.file.endswith('.html'):
             log.error('php file not found')
 
-    if not args.vulns:
+    if not args.included:
         log.error('no vulnerabilities to check is selected')
 
-    chosen_vulns = args.vulns.lower().split(',')
-
-    for vuln in chosen_vulns:
+    included_vulns = args.included.lower().split(',')
+    excluded_vulns = args.excluded.lower().split(',') if args.excluded else []
+    
+    for vuln in excluded_vulns:
         if not [_class for _class in vuln_classes if _class.keyname == vuln]:
-            log.error(f'unrecognized vulnerability: {vuln}')
+            log.error(f'unrecognized common vulnerability: {vuln}')
+            exit(0)
+        included_vulns.remove(vuln)
+    
+    for vuln in included_vulns:
+        if not [_class for _class in vuln_classes if _class.keyname == vuln]:
+            log.error(f'unrecognized common vulnerability: {vuln}')
             exit(0)
 
     global found
@@ -69,7 +77,7 @@ def main():
 
                 file_path = os.path.join(root, file)
 
-                for vuln in chosen_vulns:
+                for vuln in included_vulns:
                     Vulnerability = [_class for _class in vuln_classes if _class.keyname == vuln][0]
 
                     vuln_obj = Vulnerability(file_path)
@@ -78,7 +86,7 @@ def main():
                         log.found(file_path, line, no, vuln_part, vuln_obj.name)
                         found += 1
     else:
-        for vuln in chosen_vulns:
+        for vuln in included_vulns:
             Vulnerability = [_class for _class in vuln_classes if _class.keyname == vuln][0]
 
             vuln_obj = Vulnerability(args.file)

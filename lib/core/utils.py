@@ -43,13 +43,8 @@ def get_vulnerability_classes():
         if not importlib.import_module(module_name):
             continue
 
-        for _class in inspect.getmembers(sys.modules[module_name], inspect.isclass):
-            #class_name = _class[0]
-            class_object = _class[1]
-
-            if class_object == Vulnerability:
-                continue
-
-            classes.append(class_object)
+        for _, class_object in inspect.getmembers(sys.modules[module_name], inspect.isclass):
+            if hasattr(class_object, 'issubclass') and class_object.issubclass(Vulnerability):
+                classes.append(class_object)
 
     return classes

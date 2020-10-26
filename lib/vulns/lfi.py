@@ -1,7 +1,7 @@
 from lib.common.abc import Vulnerability
 
 
-class LocalFileInclusion (Vulnerability):
+class LocalFileInclusion(Vulnerability):
 
     name = 'LOCAL FILE INCLUSION'
     keyname = 'lfi'
@@ -10,4 +10,4 @@ class LocalFileInclusion (Vulnerability):
         self.file_path = file_path
 
     def find(self):
-        return self._find(r'include\(.*[\$].+\)')
+        return self._find(r'(include|require|require_once)\(.*[\$].+\)')

@@ -12,4 +12,10 @@ class IPExposure(Vulnerability):
         self.file_path = file_path
 
     def find(self):
-        return [(code, line_no, match) for code, line_no, match in self._find(r'[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}') if not ipaddress.IPv4Interface(match).is_private]
+        vulns = []
+        for code, line_no, match in self._find(r'("|\')[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}("|\')'):
+            ip = match[1:-1]
+            if ipaddress.IPv4Address(ip).is_private:
+                continue
+            vulns.append((code, line_no, match))
+        return vulns

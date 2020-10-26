@@ -14,6 +14,11 @@ class Credentials(Vulnerability):
     def find(self):
         vulns = []
         for code, line_no, match in self._find(r'\$[^\->\$]*(pwd|pass|key|secret|token)[\w]*\s*=\s*("|\').*("|\')'):
+            password = re.search(r'("|\')(.*)("|\')', match)
+            if not password:
+                continue
+            if len(password.group(2)) == 0:
+                continue
             vulns.append((code, line_no, match))
         return vulns
 
