@@ -25,4 +25,7 @@ python -m  pip install -r requirements.txt
 ## Usage
 
 To get the list of all options use:
- `python phpvuln.py -h`
+
+``` bash
+python phpvuln.py -h
+```
