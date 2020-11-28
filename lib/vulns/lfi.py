@@ -7,7 +7,7 @@ class LocalFileInclusion(Vulnerability):
     keyname = 'lfi'
 
     def __init__(self, file_path):
-        self.file_path = file_path
+        super().__init__(file_path)
 
     def find(self):
-        return self._find(r'(include|require|require_once)\(.*[\$].+\)')
+        return self._find(r'(include|require|require_once)\(.*[\$].+\)|(\s+|^)(\$_(GET|POST)\[("|\')(path|filepath|filename|image|imagename)("|\')\])')

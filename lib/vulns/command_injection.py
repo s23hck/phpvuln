@@ -9,14 +9,13 @@ class CommandInjection(Vulnerability):
     keyname = 'cmdi'
 
     def __init__(self, file_path):
-        self.file_path = file_path
         super().__init__(file_path)
 
     def find(self):
         vulns = []
 
         for code, no, match in self._find(r'(\s+|^)(exec|system|shell_exec)\(.*[\$].+\)', False):
-            if re.search(r'(exec|system|shell_exec)\(.*escapeshellarg\(.*[\$].+\).*\)', match):
+            if re.search(r'(exec|system|shell_exec|popen|passthru|proc_open|pcntl_exec)\(.*(escapeshellarg|escapeshellcmd)\(.*[\$].+\).*\)', match):
                 continue
 
             vulns.append((code, no, match))
