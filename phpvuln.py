@@ -83,6 +83,8 @@ def main():
                     vuln_obj = Vulnerability(file_path)
 
                     for line, no, vuln_part in vuln_obj.find():
+                        while line.endswith(' '):
+                            line = line[:-1]
                         log.found(file_path, line, no, vuln_part, vuln_obj.name)
                         found += 1
     else:
@@ -92,6 +94,8 @@ def main():
             vuln_obj = Vulnerability(args.file)
 
             for line, no, vuln_part in vuln_obj.find():
+                while line.endswith(' '):
+                    line = line[:-1]
                 log.found(args.file, line, no, vuln_part, vuln_obj.name)
                 found += 1
 
