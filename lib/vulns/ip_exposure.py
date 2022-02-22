@@ -17,9 +17,14 @@ class IPExposure(Vulnerability):
         for code, line_no, match in self._find(r'("|\')[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}("|\')'):
             ip = match[1:-1]
 
-            if ipaddress.IPv4Address(ip).is_private:
-                continue
+            try:
+                ipaddress.ip_interface(ip)
+                if ipaddress.IPv4Address(ip).is_private:
+                    continue
 
-            vulns.append((code, line_no, match))
+                vulns.append((code, line_no, match))
+
+            except ValueError:
+                pass
 
         return vulns
